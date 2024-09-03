@@ -13,13 +13,10 @@ namespace GoogleDriveUpload
     {
         private static string ApplicationName = "Drive API .NET Console App";
         private UserCredential _credential;
-
         public Video(UserCredential credential)
         {
             _credential = credential;
         }
-
-
 
 
 
@@ -61,23 +58,32 @@ namespace GoogleDriveUpload
                     fileRequest = service.Files.Create(fileMetadata, stream, "application/octet-stream");
                     fileRequest.Fields = "id";
 
-                    // Suscribirse al evento de progreso
-                    fileRequest.ProgressChanged += FileRequest_ProgressChanged;
+                    IUploadProgress progress = null;
+                    int maxRetries = 3;
+                    int retries = 0;
 
-                    // Iniciar la subida
-                    var progress = fileRequest.Upload();
-
-                    if (progress.Status == UploadStatus.Completed)
+                    while (retries < maxRetries)
                     {
-                        var file = fileRequest.ResponseBody;
-                        result.Correct = true;
-                        result.Message = $"Archivo subido y validado correctamente: {file.Name} (ID: {file.Id})";
-                        Console.WriteLine(result.Message);
+                        progress = fileRequest.Upload();
+                        if (progress.Status == UploadStatus.Completed)
+                        {
+                            var file = fileRequest.ResponseBody;
+                            result.Correct = true;
+                            result.Message = $"Archivo subido y validado correctamente: {file.Name} (ID: {file.Id})";
+                            Console.WriteLine(result.Message);
+                            break;
+                        }
+                        else if (progress.Status == UploadStatus.Failed)
+                        {
+                            Console.WriteLine($"Error al subir el archivo {fullPath}, reintentando... ({retries + 1}/{maxRetries})");
+                            retries++;
+                        }
                     }
-                    else
+
+                    if (progress.Status != UploadStatus.Completed)
                     {
                         result.Correct = false;
-                        result.Message = $"Error al subir el archivo: {fullPath}";
+                        result.Message = $"Error al subir el archivo: {fullPath} después de {maxRetries} intentos.";
                         Console.WriteLine(result.Message);
                     }
                 }
@@ -95,9 +101,6 @@ namespace GoogleDriveUpload
         {
             Console.WriteLine($"{progress.Status}: {progress.BytesSent} bytes enviados.");
         }
-
-
-  
 
         public bool VerifyFileUpload(DriveService service, string fileId)
         {
