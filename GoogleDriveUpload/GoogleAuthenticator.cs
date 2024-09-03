@@ -69,9 +69,9 @@ namespace GoogleDriveUpload
                     }
                 }
 
-                // Obtener la información del perfil del usuario autenticado
-                var email = GetAuthenticatedUserEmail(credential);
-                Console.WriteLine($"Autenticado con la cuenta: {email}");
+                // Obtener la información del perfil del usuario autenticado (OPCIONAL DEPENDIENDO DE QUE TIPO DE SEGURIDAD CONTENGA.)
+                //var email = GetAuthenticatedUserEmail(credential);
+                //Console.WriteLine($"Autenticado con la cuenta: {email}");
 
                 return credential;
             }
@@ -116,7 +116,7 @@ namespace GoogleDriveUpload
                 var updatedJson = JsonConvert.SerializeObject(tokenResponse, Formatting.Indented);
 
                 // Sobrescribir el archivo de token con la nueva información
-                //File.WriteAllText(tokenFilePath, updatedJson);
+                File.WriteAllText(tokenFilePath, updatedJson);
 
                 Console.WriteLine("El archivo de token ha sido actualizado correctamente.");
 
@@ -144,7 +144,7 @@ namespace GoogleDriveUpload
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"Error al obtener el correo electrónico: {ex.Message}");
+                Console.WriteLine($"Error al obtener el correo electrónico: {ex.Message}");
                 return "Correo no disponible";
             }
         }

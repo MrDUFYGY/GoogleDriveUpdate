@@ -8,9 +8,10 @@ namespace GoogleDriveUpload
         public static M_Result ProcessFileUpload(string fullPath)
         {
             var result = new M_Result();
+
             try
             {
-                // Instanciar el autenticador de Google y autenticar al usuario
+                // Autenticar al usuario utilizando GoogleAuthenticator
                 GoogleAuthenticator authenticator = new GoogleAuthenticator();
                 UserCredential credential = authenticator.Authenticate();
 
@@ -21,19 +22,19 @@ namespace GoogleDriveUpload
                     return result;
                 }
 
-                // Instanciar el gestor de Google Drive con las credenciales autenticadas
-                VideoUpload videoUpload = new VideoUpload(credential);
+                // Instanciar la clase Video para gestionar la subida del archivo a Google Drive
+                Video videoManager = new Video(credential);
 
-                // Subir y verificar el archivo en la ruta especificada
-                var uploadResult = videoUpload.UploadAndVerifyFile(fullPath);
+                // Subir y verificar el archivo en Google Drive
+                var uploadResult = videoManager.UploadAndVerifyFile(fullPath);
 
                 if (!uploadResult.Correct)
                 {
-                    return uploadResult;  // Retornar si la subida falla
+                    return uploadResult; // Retornar el resultado si la subida falla
                 }
 
-                // Eliminar el archivo local después de subirlo
-                videoUpload.DeleteLocalFile(fullPath);
+                // Eliminar el archivo local después de haberlo subido exitosamente
+                videoManager.DeleteLocalFile(fullPath);
 
                 result.Correct = true;
                 result.Message = "Se completó la ejecución de todos los módulos correctamente.";
@@ -44,8 +45,8 @@ namespace GoogleDriveUpload
                 result.Message = "Ha ocurrido un error. ERROR: " + ex.Message;
                 result.Error = ex;
             }
+
             return result;
         }
-
     }
 }

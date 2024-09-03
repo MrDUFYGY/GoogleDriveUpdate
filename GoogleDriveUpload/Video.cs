@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace GoogleDriveUpload
 {
-    public class VideoUpload
+    public class Video
     {
         private static string ApplicationName = "Drive API .NET Console App";
         private UserCredential _credential;
 
-        public VideoUpload(UserCredential credential)
+        public Video(UserCredential credential)
         {
             _credential = credential;
         }
