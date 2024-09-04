@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace GoogleDriveUpload
 {
-    public class Video
+    public class Video     
     {
         private static string ApplicationName = "Drive API .NET Console App";
         private UserCredential _credential;
