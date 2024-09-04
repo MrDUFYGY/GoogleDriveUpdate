@@ -3,7 +3,6 @@ using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Drive.v3;
 using Google.Apis.Oauth2.v2;
-using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Newtonsoft.Json;
 using System;
@@ -28,7 +27,8 @@ namespace GoogleDriveUpload
         {
             try
             {
-                string credPath = Path.Combine(Path.GetTempPath(), "tokenFolder");
+                // Cambiar la ubicación de la carpeta temporal al directorio del proyecto
+                string credPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tempToken");
 
                 // Crear o actualizar el archivo de token con la información de app.config
                 var tokenResponse = UpdateTokenResponse(credPath);
@@ -69,10 +69,6 @@ namespace GoogleDriveUpload
                     }
                 }
 
-                // Obtener la información del perfil del usuario autenticado (OPCIONAL DEPENDIENDO DE QUE TIPO DE SEGURIDAD CONTENGA.)
-                //var email = GetAuthenticatedUserEmail(credential);
-                //Console.WriteLine($"Autenticado con la cuenta: {email}");
-
                 return credential;
             }
             catch (Exception ex)
@@ -86,6 +82,12 @@ namespace GoogleDriveUpload
         {
             try
             {
+                // Crear el directorio de tempToken si no existe
+                if (!Directory.Exists(credPath))
+                {
+                    Directory.CreateDirectory(credPath);
+                }
+
                 // Ruta completa del archivo de token
                 string tokenFilePath = Path.Combine(credPath, "Google.Apis.Auth.OAuth2.Responses.TokenResponse-user");
 
@@ -100,6 +102,14 @@ namespace GoogleDriveUpload
                 else
                 {
                     tokenResponse = new TokenResponse();
+                }
+
+                // Verificar si las configuraciones del App.config están presentes
+                if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["AccessToken"]) ||
+                    string.IsNullOrEmpty(ConfigurationManager.AppSettings["RefreshToken"]) ||
+                    string.IsNullOrEmpty(ConfigurationManager.AppSettings["ExpiresInSeconds"]))
+                {
+                    throw new ConfigurationErrorsException("Faltan configuraciones críticas en el app.config");
                 }
 
                 // Actualizar las propiedades del token según la información de app.config
@@ -119,33 +129,18 @@ namespace GoogleDriveUpload
                 File.WriteAllText(tokenFilePath, updatedJson);
 
                 Console.WriteLine("El archivo de token ha sido actualizado correctamente.");
-
+                // Eliminar el archivo de token generado
+                if (File.Exists(tokenFilePath))
+                {
+                    File.Delete(tokenFilePath);
+                    Console.WriteLine("El archivo de token ha sido eliminado correctamente.");
+                }
                 return tokenResponse;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error al actualizar el archivo de token: {ex.Message}");
                 throw; // Relanza la excepción para que sea manejada en Authenticate
-            }
-        }
-
-        private string GetAuthenticatedUserEmail(UserCredential credential)
-        {
-            try
-            {
-                var oauth2Service = new Oauth2Service(new BaseClientService.Initializer
-                {
-                    HttpClientInitializer = credential,
-                    ApplicationName = ApplicationName,
-                });
-
-                var userInfo = oauth2Service.Userinfo.Get().Execute();
-                return userInfo.Email ?? "Correo no disponible";
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al obtener el correo electrónico: {ex.Message}");
-                return "Correo no disponible";
             }
         }
     }

@@ -24,8 +24,8 @@ C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\bin\Debug\Google.Api
 C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\bin\Debug\Newtonsoft.Json.xml
 C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\bin\Debug\System.CodeDom.xml
 C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\obj\Debug\GoogleDriveUpload.csproj.AssemblyReference.cache
 C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\obj\Debug\GoogleDriveUpload.csproj.CoreCompileInputs.cache
+C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\obj\Debug\GoogleDr.1BF92041.Up2Date
 C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\obj\Debug\GoogleDriveUpload.dll
 C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\obj\Debug\GoogleDriveUpload.pdb
-C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\obj\Debug\GoogleDriveUpload.csproj.AssemblyReference.cache
-C:\Users\fjuarez\source\repos\DriveUpload\GoogleDriveUpload\obj\Debug\GoogleDr.1BF92041.Up2Date
