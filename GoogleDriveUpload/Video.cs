@@ -60,10 +60,10 @@ namespace GoogleDriveUpload
                     // Suscribirse al evento de progreso
                     fileRequest.ProgressChanged += (uploadProgress) =>
                     {
-                        ShowProgress(uploadProgress);  // Cambié el nombre a 'uploadProgress'
+                        ShowProgress(uploadProgress);  
                     };
 
-                    IUploadProgress uploadStatus = null; // Cambié el nombre a 'uploadStatus'
+                    IUploadProgress uploadStatus = null; 
                     int maxRetries = 5;
                     int retries = 0;
 
