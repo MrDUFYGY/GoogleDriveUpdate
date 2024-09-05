@@ -5,7 +5,9 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Util.Store;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Configuration;
 using System.IO;
+using System.Threading;
 
 public class GoogleGetCredentials
 {
@@ -105,6 +107,40 @@ public class GoogleGetCredentials
         catch (Exception ex)
         {
             Console.WriteLine($"Error al generar el archivo de configuración: {ex.Message}");
+        }
+    }
+
+    public UserCredential Get()
+    {
+        try
+        {
+            string[] Scopes = { DriveService.Scope.DriveFile, DriveService.Scope.Drive };
+            string credPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tempToken");
+
+            if (!Directory.Exists(credPath))
+            {
+                Directory.CreateDirectory(credPath);
+            }
+
+            // Autenticar al usuario
+            UserCredential credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                new ClientSecrets
+                {
+                    ClientId = ConfigurationManager.AppSettings["ClientId"],
+                    ClientSecret = ConfigurationManager.AppSettings["ClientSecret"]
+                },
+                Scopes,
+                "user",
+                CancellationToken.None,
+                new FileDataStore(credPath, true)
+            ).Result;
+
+            return credential;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error durante la autenticación: {ex.Message}");
+            return null; // Devolver null si hay un error
         }
     }
 

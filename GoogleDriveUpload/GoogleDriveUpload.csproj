@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Credentials.cs" />
     <Compile Include="GoogleAuthenticator.cs" />
+    <Compile Include="GoogleDrivePermissionManager.cs" />
     <Compile Include="GoogleGetCredentials.cs" />
     <Compile Include="Init.cs" />
     <Compile Include="M_Path.cs" />

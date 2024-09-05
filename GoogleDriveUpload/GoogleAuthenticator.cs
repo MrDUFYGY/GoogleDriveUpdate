@@ -17,6 +17,7 @@ namespace GoogleDriveUpload
         private static readonly string[] Scopes =
         {
             DriveService.Scope.DriveFile,
+            DriveService.Scope.Drive,
             Oauth2Service.Scope.UserinfoProfile,
             Oauth2Service.Scope.UserinfoEmail
         };
