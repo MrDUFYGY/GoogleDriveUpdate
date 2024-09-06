@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 
 namespace GoogleDriveUpload
-{
+{ 
     public class GoogleDrivePermissionManager
     {
         private readonly DriveService _service;
